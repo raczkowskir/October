@@ -9,7 +9,7 @@ public class Ex1 {
     }
 
     public Integer getNumber() {
-        Integer myNumber;
+        int myNumber;
         while(true) {
             try {
                 Scanner scanner = new Scanner(System.in);
@@ -21,6 +21,4 @@ public class Ex1 {
             return myNumber;
         }
     }
-
-
 }
