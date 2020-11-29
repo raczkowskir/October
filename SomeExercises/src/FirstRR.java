@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 // prepare exe file
 // enlarge txtField
 
+// refactor to have less code and key actions
+//
+
 public class FirstRR {
     private JPanel rakiPanel;
     private JTextField calculationsTxtField;
@@ -27,6 +30,17 @@ public class FirstRR {
         result = 0.0;
     }
 
+    public class rakiAction extends AbstractAction {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            minusBehaviour();
+        }
+    }
+
+    Action firstAction = new rakiAction();
+
+
     public FirstRR() {
         btnClear.addActionListener(actionBtnClear);
         btnPlus.addActionListener(actionBtnPlus);
@@ -36,6 +50,9 @@ public class FirstRR {
         btnResult.addActionListener(actionBtnResult);
         btnBack.addActionListener(actionBtnBack);
         setListnersForNumericbtns();
+        calculationsTxtField.getInputMap().put(KeyStroke.getKeyStroke("MINUS"), "minusAction");
+        calculationsTxtField.getActionMap().put("minusAction", firstAction);
+
     }
 
     ActionListener actionBtnBack = new ActionListener() {
@@ -49,13 +66,11 @@ public class FirstRR {
                 calculationsTxtField.setText(calcTxtFieldContent.substring(0, calcTxtFieldContent.length() - 1));
 
                 if (operationType == '?') {
-                    firstNumber = firstNumber.substring(0, firstNumber.length() -1);
-                }
-                else if (lastMark == '+' || lastMark == '-' || lastMark == '/' || lastMark == '*') {
+                    firstNumber = firstNumber.substring(0, firstNumber.length() - 1);
+                } else if (lastMark == '+' || lastMark == '-' || lastMark == '/' || lastMark == '*') {
                     operationType = '?';
-                }
-                else {
-                    secondNumber = secondNumber.substring(0, secondNumber.length() -1);
+                } else {
+                    secondNumber = secondNumber.substring(0, secondNumber.length() - 1);
                 }
 
             } catch (StringIndexOutOfBoundsException err) {
@@ -77,7 +92,7 @@ public class FirstRR {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("plus");
-            if (! firstNumber.equals("")) {
+            if (!firstNumber.equals("")) {
                 calculationsTxtField.setText(firstNumber + "+");
                 operationType = '+';
                 secondNumber = "";
@@ -88,20 +103,24 @@ public class FirstRR {
     ActionListener actionBtnMinus = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("minus");
-            if (! firstNumber.equals("")) {
-                calculationsTxtField.setText(firstNumber + "-");
-                operationType = '-';
-                secondNumber = "";
-            }
+            minusBehaviour();
         }
     };
+
+    public void minusBehaviour() {
+        System.out.println("minus");
+        if (!firstNumber.equals("")) {
+            calculationsTxtField.setText(firstNumber + "-");
+            operationType = '-';
+            secondNumber = "";
+        }
+    }
 
     ActionListener actionBtnDivide = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("divide");
-            if (! firstNumber.equals("")) {
+            if (!firstNumber.equals("")) {
                 calculationsTxtField.setText(firstNumber + "/");
                 operationType = '/';
                 secondNumber = "";
@@ -113,7 +132,7 @@ public class FirstRR {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("multiply");
-            if (! firstNumber.equals("")) {
+            if (!firstNumber.equals("")) {
                 calculationsTxtField.setText(firstNumber + "*");
                 operationType = '*';
                 secondNumber = "";
@@ -155,7 +174,7 @@ public class FirstRR {
         JButton[] numericBtns = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9};
 
         for (int i = 0; i < al.length; i++) {
-            String iterator = ""+ i;
+            String iterator = "" + i;
             al[i] = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -163,8 +182,7 @@ public class FirstRR {
                     if (operationType == '?') {
                         firstNumber = firstNumber + iterator;
                         calculationsTxtField.setText(firstNumber);
-                    }
-                    else {
+                    } else {
                         secondNumber = secondNumber + iterator;
                         calculationsTxtField.setText(firstNumber + operationType + secondNumber);
                     }
@@ -182,4 +200,4 @@ public class FirstRR {
         frame.setVisible(true);
         frame.setLocation(300, 300);
     }
-   }
+}
